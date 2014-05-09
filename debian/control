@@ -1,0 +1,28 @@
+Source: pylinphone
+Section: python
+Priority: optional
+Maintainer: Ryan Pessa <ryan@essential-elements.net>
+Uploaders: AerisPOS Team <aerispos@googlegroups.com>
+Build-Depends: debhelper (>= 7.0.50~),
+               cdbs (>=0.4.90~),
+               python2.7 (>= 2.7),
+               python-all-dev | python-dev, python2.7-dev (>= 2.7),
+               cython (>= 0.7),
+               python-setuptools,
+               liblinphone-dev (>= 3.6~)
+Standards-Version: 3.9.4.0
+Homepage: http://www.essential-elements.net/
+
+Package: python-linphone
+Architecture: any
+Depends: ${misc:Depends}, ${python:Depends}, python-twisted-core, python-cnotify, liblinphone5
+Description: Python bindings for liblinphone
+ Python bindings for liblinphone
+
+Package: python-linphone-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: python-linphone (= ${binary:Version}), ${misc:Depends}
+Description: debugging symbols for python-linphone
+ debugging symbols for python-linphone

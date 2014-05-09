@@ -1,0 +1,36 @@
+#!/usr/bin/make -f
+
+.PHONY: override_dh_auto_build override_dh_auto_install override_dh_strip clean buildpy override_dh_auto_build
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf build *.egg-info ||:
+
+#override_dh_auto_build: buildpy twistd-build
+override_dh_auto_build: buildpy
+
+buildpy:
+	python setup.py install --root=debian/tmpbuild --prefix=/usr --install-layout=deb
+	find debian/tmpbuild -name '*.py' -exec rm {} \; ||:
+	find debian/tmpbuild -name 'ee' -exec rm {}/__init__.pyc \; ||:
+
+#twistd-build:
+#	python -m compileall twisted/plugins
+
+override_dh_auto_install:
+	mv debian/tmpbuild debian/tmp
+
+override_dh_strip:
+	dh_strip --dbg-package=python-linphone-dbg
+
+clean::
+	find . -name '*.so' -exec rm {} \; || :
+	find . -name '*.py[co]' -exec rm {} \; || :
+	find . -name '*.pyx' -exec sh -c 'echo `dirname {}`/`basename {} .pyx`.c' \; | xargs rm || :
+	find . -maxdepth 1 -name '*.egg-info' -type d -exec rm -rf {} \; || :
+	rm -rf build debian/tmpbuild ||:
+	python setup.py clean ||:
+	dh_clean

@@ -1,0 +1,14 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: pylinphone
+Source: http://www.essential-elements.net/
+
+Files: *
+Copyright: 2013 Essential Elements/AerisPOS Team <aerispos@googlegroups.com>
+License: EE-Proprietary
+
+License: EE-Proprietary
+ Use of the Software is subject to the terms of the AerisPOS
+ licensing agreement and the Essential Elements service contract.
+ .
+ Is is UNLAWFUL to utilize this software without the above mentioned
+ agreements, signed and approved by Essential Elements, LLC.
