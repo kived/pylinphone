@@ -58,7 +58,7 @@ cdef class LinphoneCall:
 		linphone_call_ref(self._call)
 		
 		self._lc = LoopingCall(self.reset_streams)
-		self._lc.start(40, False)
+		#self._lc.start(40, False)
 		
 		return self
 	

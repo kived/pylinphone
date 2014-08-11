@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 
 from itertools import chain
-from setuptools import setup, find_packages, Extension as se_Extension
-from Cython.Distutils import build_ext, Extension as cy_Extension
+from setuptools import setup, find_packages
 import fnmatch, os, sys
 
-packages = [pkg for pkg in find_packages('.')]
+have_cython = False
+try:
+	from Cython.Distutils import build_ext, Extension
+	have_cython = True
+except ImportError:
+	from distutils.extension import Extension
+	from distutils.command.build_ext import build_ext
 
-def Extension(*args, **kwargs):
-	try:
-		return cy_Extension(*args, **kwargs)
-	except:
-		return se_Extension(*args, **kwargs)
+packages = [pkg for pkg in find_packages('.')]
 
 inc_dirs = ['.']
 lib_dirs = []
@@ -28,6 +29,8 @@ else:
 
 def make_cy_ext(filename, inc_dirs=inc_dirs, lib_dirs=lib_dirs, libs=libs, global_compile_args=global_compile_args, debug_build=debug_build):
 	modname = filename.replace('.pyx', '').replace('/', '.')
+	if not have_cython:
+		filename = '%s.c' % filename[:-4]
 	return Extension(name=modname, sources=[filename], 
 					 include_dirs=inc_dirs, library_dirs=lib_dirs, libraries=libs,
 					 extra_compile_args=global_compile_args + ['-fPIC'],
