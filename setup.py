@@ -45,6 +45,10 @@ for root, dirname, filenames in os.walk('pylinphone'):
 
 version = file('VERSION').read().strip()
 
+print 'creating "config.pxi"...'
+with open(os.path.join(os.path.dirname(__file__), 'pylinphone', 'config.pxi'), 'w') as f:
+	f.write('DEF ANDROID = %s\n' % (not have_cython))
+
 setup(name='pylinphone',
 	  version=version,
 	  description='Python bindings for liblinphone',
