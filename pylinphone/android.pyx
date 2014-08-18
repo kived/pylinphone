@@ -2,9 +2,7 @@ include "config.pxi"
 
 IF ANDROID:
 	
-	cdef extern from "jvm.h":
-		cdef struct JavaVM
-		cdef struct JNIEnv
+	include "jni.pxi"
 	
 	cdef extern JNIEnv* SDL_ANDROID_GetJNIEnv()
 	
