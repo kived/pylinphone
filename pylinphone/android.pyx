@@ -2,11 +2,11 @@ include "config.pxi"
 
 IF ANDROID:
 	
-	# include "jni.pxi"
+	include "jni.pxi"
 	# 
 	# cdef extern JNIEnv* SDL_ANDROID_GetJNIEnv()
 	
-	from jnius.jnius cimport get_jnienv, JNIEnv, JavaVM
+	from jnius.jnius cimport get_jnienv
 	
 	cdef extern from "mediastreamer2/msjava.h":
 		void ms_set_jvm(JavaVM* vm)
