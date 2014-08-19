@@ -16,5 +16,5 @@ IF ANDROID:
 		cdef JNIEnv* jnienv = get_jnienv()
 		# cdef JNIEnv* jnienv = SDL_ANDROID_GetJNIEnv()
 		# jnienv[0].GetJavaVM(jnienv, &jvm)
-		jnienv.GetJavaVM(jnienv, &jvm)
+		jnienv[0].GetJavaVM(jnienv, &jvm)
 		ms_set_jvm(jvm)
