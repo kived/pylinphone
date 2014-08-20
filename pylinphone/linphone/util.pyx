@@ -2,7 +2,7 @@ from pylinphone.linphone.lib.ortp.payloadtype cimport PayloadType
 from pylinphone.linphone.lib.mediastreamer2.msvideo cimport MSVideoSize
 
 cdef str nstr(const char* s):
-	return str(s) if s != NULL else '(null)'
+	return <bytes>s if s != NULL else '(null)'
 
 cdef dict payload2dict(PayloadType* pt):
 	if pt == NULL:

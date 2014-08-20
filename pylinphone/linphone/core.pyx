@@ -312,7 +312,7 @@ cdef class LinphoneCore:
 	property ringer_device:
 		def __get__(self):
 			cdef char* dev = linphone_core_get_ringer_device(self.core)
-			return <bytes>dev
+			return nstr(dev)
 		def __set__(self, bytes dev):
 			if dev not in self.sound_devices:
 				raise ValueError('invalid sound device')
@@ -321,7 +321,7 @@ cdef class LinphoneCore:
 	property playback_device:
 		def __get__(self):
 			cdef char* dev = linphone_core_get_playback_device(self.core)
-			return <bytes>dev
+			return nstr(dev)
 		def __set__(self, bytes dev):
 			if dev not in self.sound_devices:
 				raise ValueError('invalid sound device')
@@ -330,7 +330,7 @@ cdef class LinphoneCore:
 	property capture_device:
 		def __get__(self):
 			cdef char* dev = linphone_core_get_capture_device(self.core)
-			return <bytes>dev
+			return nstr(dev)
 		def __set__(self, bytes dev):
 			if dev not in self.sound_devices:
 				raise ValueError('invalid sound device')
@@ -351,7 +351,7 @@ cdef class LinphoneCore:
 	property video_device:
 		def __get__(self):
 			cdef char* dev = linphone_core_get_video_device(self.core)
-			return <bytes>dev
+			return nstr(dev)
 		def __set__(self, bytes dev):
 			if dev not in self.video_devices:
 				raise ValueError('invalid video device')
