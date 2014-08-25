@@ -8,6 +8,12 @@ from __future__ import absolute_import
 from time import sleep
 from cython.operator cimport dereference as deref
 
+include '../config.pxi'
+
+IF ANDROID:
+	from jnius import autoclass
+	AndroidCameraConfiguration = autoclass('org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration')
+
 from pylinphone.linphone.lib.core cimport linphone_core_new, linphone_core_destroy, \
 	linphone_core_set_sip_transports, linphone_core_iterate, linphone_core_get_default_proxy, \
 	linphone_core_add_proxy_config, linphone_core_set_default_proxy, linphone_registration_state_to_string, \
@@ -335,18 +341,34 @@ cdef class LinphoneCore:
 			if dev not in self.sound_devices:
 				raise ValueError('invalid sound device')
 			linphone_core_set_capture_device(self.core, <char*>dev)
-	
-	property video_devices:
+
+	property _real_video_devices:
 		def __get__(self):
 			cdef char** dev = linphone_core_get_video_devices(self.core)
 			cdef int s = sizeof(char*)
 			cdef list devs = []
 			cdef bytes dname
 			while dev != NULL and deref(dev) != NULL:
-				dname = <bytes>deref(dev)
+				dname = <bytes> deref(dev)
 				devs.append(dname)
-				dev = <char**>(<int>dev + s)
+				dev = <char**> (<int> dev + s)
 			return devs
+	
+	IF ANDROID:
+		property video_devices:
+			def __get__(self):
+				cameras = AndroidCameraConfiguration.retrieveCameras()
+				# devs = {}
+				# for camera in cameras:
+				# 	#sizes = []
+				# 	#for size in camera.resolutions:
+				# 	#	sizes.append((size.width, size.height))
+				# 	devs[camera.id] = ('front' if camera.frontFacing else 'rear', camera.orientation) #, sizes)
+				return self._real_video_devices
+	ELSE:
+		property video_devices:
+			def __get__(self):
+				return self._real_video_devices
 	
 	property video_device:
 		def __get__(self):
