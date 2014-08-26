@@ -28,7 +28,7 @@ from pylinphone.linphone.lib.core cimport linphone_core_new, linphone_core_destr
 	linphone_core_get_audio_jittcomp, linphone_core_set_audio_jittcomp, linphone_core_get_video_jittcomp, \
 	linphone_core_set_video_jittcomp, linphone_core_get_audio_codecs, linphone_core_get_video_codecs, \
 	linphone_core_enable_video_capture, linphone_core_video_capture_enabled, linphone_core_enable_video_display, \
-	linphone_core_video_display_enabled, linphone_call_get_user_pointer
+	linphone_core_video_display_enabled, linphone_call_get_user_pointer, linphone_core_enable_logs_with_cb
 from pylinphone.linphone.lib.core cimport cLinphoneCore, cLinphoneProxyConfig, LinphoneRegistrationState, \
 	LinphoneFriend, LinphoneCallLog, LinphoneChatRoom, cLinphoneCall, LinphoneCallState, LinphoneGlobalState, \
 	LinphoneAddress, LCSipTransports, LinphoneRegistrationCleared
@@ -46,6 +46,8 @@ from pylinphone.linphone.call cimport LinphoneCall, get_call_for_c_call
 
 from pylinphone.linphone.proxyconfig cimport get_proxy_for_c_proxy, LinphoneProxyConfig
 from pylinphone.linphone.util cimport payload2dict, nstr
+
+from pylinphone.linphone.logger cimport linphone_logger
 
 cdef void c_auth_info_requested(cLinphoneCore* lc, const char* realm, const char* username):
 	cdef object cb = _core.get_callback('auth_info_requested')
@@ -166,8 +168,9 @@ cdef void c_text_received(cLinphoneCore* lc, LinphoneChatRoom* room, const Linph
 		print 'text_received TODO: LinphoneChatRoom, LinphoneAddress'
 		cb()
 
+
 cdef class LinphoneCore:
-	def __init__(self, config_path=None, factory_config=None, userdata=None, use_twisted=True):
+	def __init__(self, config_path=None, factory_config=None, userdata=None, use_twisted=True, with_logging=True):
 		global _core
 		if _core:
 			raise RuntimeError('cannot instantiate more than one LinphoneCore')
@@ -208,6 +211,9 @@ cdef class LinphoneCore:
 		
 		core = self.core = linphone_core_new(&self.vtable, cpath, fconf, udata)
 		self.proxy_cfg = None
+		
+		if with_logging:
+			linphone_core_enable_logs_with_cb(linphone_logger)
 		
 		cdef LCSipTransports tr
 		tr.udp_port = 5060
