@@ -1,7 +1,8 @@
 import logging
 
 cdef extern from "stdarg.h":
-	ctypedef struct va_list
+	ctypedef struct va_list:
+		pass
 
 cdef extern from "stdio.h":
 	int vsnprintf(char* s, size_t n, const char* format, va_list arg)
