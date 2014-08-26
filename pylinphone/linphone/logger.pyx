@@ -23,7 +23,10 @@ cdef void linphone_logger_fn(OrtpLogLevel lev, const char* fmt, va_list args):
 	elif lev == ORTP_FATAL:
 		level = 'critical'
 	
-	getattr(logging.getLogger(_LOG_TAG), level)(str(msg))
+	logger = logging.getLogger(_LOG_TAG)
+	logger.critical('log output')
+	getattr(logger, level)(str(msg))
+	logger.critical('log finished')
 	
 	
 cdef OrtpLogFunc linphone_logger = <OrtpLogFunc>linphone_logger_fn
